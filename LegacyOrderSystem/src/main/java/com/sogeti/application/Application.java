@@ -8,11 +8,10 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Envelope;
-import com.sogeti.repository.DetailsRepositoryImpl;
-import com.sogeti.repository.OrdersRepositoryImpl;
-import com.sogeti.repository.UsersRepositoryImpl;
+import com.sogeti.command.Command;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
@@ -22,6 +21,7 @@ public class Application {
 	private static final Logger logger = Logger.getLogger(Application.class);
 	private static final String RPC_QUEUE_NAME = "rpc_queue";
 	private static final Gson gson = new Gson();
+	private static Command command;
 
 	public static void main(String[] argv) {
 		logger.debug("QueueServer starting up");
@@ -50,9 +50,11 @@ public class Application {
 
 					try {
 						String message = new String(body, "UTF-8");
-						logger.info(message);
-						response = executeRequest(message);
-					} catch (RuntimeException e) {
+						logger.info("command received: " + message);
+						command = gson.fromJson(message, Command.class);
+						// response = executeRequest(message);
+						response = command.executeCommand();
+					} catch (RuntimeException | SQLException e) {
 						logger.error(e);
 					} finally {
 						channel.basicPublish("", properties.getReplyTo(), replyProps, response.getBytes("UTF-8"));
@@ -86,40 +88,6 @@ public class Application {
 					logger.error(ioe);
 				}
 		}
-	}
-
-	// TODO REDO USING OBJECT
-	private static String executeRequest(String message) {
-		logger.debug("In executeRequest of QueueServer");
-
-		String[] request = message.split("/");
-		String response = null;
-
-		switch (request[0]) {
-		case "getUserWithCredentials":
-			response = gson.toJson(new UsersRepositoryImpl().getUserWithCredentials(request[1], request[2]));
-			break;
-		case "getUsers":
-			response = gson.toJson(new UsersRepositoryImpl().getAllObjects());
-			break;
-		case "getOrderById":
-			response = gson.toJson(new OrdersRepositoryImpl().getObjectById(Integer.parseInt(request[1])));
-			break;
-		case "getOrders":
-			response = gson.toJson(new OrdersRepositoryImpl().getAllObjects());
-			break;
-		case "getDetails":
-			response = gson.toJson(new DetailsRepositoryImpl().getAllObjects());
-			break;
-		case "getDetailById":
-			response = gson.toJson(new DetailsRepositoryImpl().getObjectById(Integer.parseInt(request[1])));
-			break;
-		default:
-			logger.debug("couldn't recognize request");
-			break;
-		}
-		logger.info("Returning response from executeRequest");
-		return response;
 	}
 
 }

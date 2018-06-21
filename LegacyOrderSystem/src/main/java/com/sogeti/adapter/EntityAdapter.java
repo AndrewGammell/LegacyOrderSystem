@@ -3,38 +3,46 @@ package com.sogeti.adapter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.sogeti.entity.OrderEntity;
-import com.sogeti.entity.DetailEntity;
-import com.sogeti.entity.UserEntity;
+import com.sogeti.model.DetailModel;
+import com.sogeti.model.OrderModel;
+import com.sogeti.model.UserModel;
 
 public class EntityAdapter {
-	// TODO REPLACE WITH HIBERNATE
+
 	private EntityAdapter() {
-		
+
 	}
 
-	public static OrderEntity parseOrder(ResultSet results) throws SQLException {
+	public static OrderModel parseOrder(ResultSet results) throws SQLException {
 
-		OrderEntity order = new OrderEntity();	
-		
+		OrderModel order = new OrderModel();
+
 		order.setOrderId(results.getInt("order_id"));
 		order.setCreatedDate(results.getDate("created_date"));
 		order.setCreatedStaffId(results.getString("created_staff_id"));
 		order.setDateOrdered(results.getDate("date_ordered"));
-		order.setDateRecieved(results.getDate("date_recieved"));
-		order.setStatus(results.getString("status"));
+		order.setDateReceived(results.getDate("date_received"));
 		order.setUpdatedDate(results.getDate("updated_date"));
-		order.setUpdatedStaffId(results.getString("updated_staff_id"));		
+		order.setUpdatedStaffId(results.getString("updated_staff_id"));
+		
+		switch(results.getString("status").toLowerCase()) {
+		case "shipped": order.setStatus(OrderModel.Status.SHIPPED);  
+		break;
+		case "received": order.setStatus(OrderModel.Status.SHIPPED);
+		break;
+		case "cancelled" : order.setStatus(OrderModel.Status.CANCELLED);
+		break;
+		}
 
 		return order;
 	}
 
-	public static DetailEntity parseDetails(ResultSet results) throws SQLException {
+	public static DetailModel parseDetails(ResultSet results) throws SQLException {
 
-		DetailEntity details = new DetailEntity();
+		DetailModel details = new DetailModel();
 
 		details.setCreatedDate(results.getDate("created_date"));
-		details.setCreateStaffId(results.getString("created_staff_id"));
+		details.setCreatedStaffId(results.getString("created_staff_id"));
 		details.setQuantity(results.getInt("quantity"));
 		details.setOrderId(results.getInt("order_id"));
 		details.setProductId(results.getInt("product_id"));
@@ -44,10 +52,10 @@ public class EntityAdapter {
 
 		return details;
 	}
-	
-	public static UserEntity parseUser(ResultSet results) throws SQLException {
 
-		UserEntity user = new UserEntity();	
+	public static UserModel parseUser(ResultSet results) throws SQLException {
+
+		UserModel user = new UserModel();
 
 		user.setId(results.getInt("id"));
 		user.setFirstName(results.getString("firstname"));
@@ -60,6 +68,5 @@ public class EntityAdapter {
 
 		return user;
 	}
-
 
 }
