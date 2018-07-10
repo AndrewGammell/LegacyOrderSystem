@@ -23,15 +23,17 @@ import com.sogeti.model.DetailModel;
 public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 
 	private static final Logger logger = Logger.getLogger(DetailsRepositoryImpl.class);
-	private Connection connector = RepositoryConnector.getConnection();
-	private Statement statement;
-	private ResultSet results;
-	private SessionFactory factory;
-	private Session session;
-	private Gson gson = new Gson();
 
-	private String getAllDetails = "SELECT * FROM orders_details";
-	private String getDetailsById = "SELECT * FROM orders_details WHERE order_id=%d";
+	private Connection		connector	= RepositoryConnector.getConnection();
+	private Statement		statement;
+	private ResultSet		results;
+	private SessionFactory	factory;
+	private Session			session;
+	private Gson			gson		= new Gson();
+
+	private String	getAllDetails		= "SELECT * FROM orders_details";
+	private String	getDetailsById		= "SELECT * FROM orders_details WHERE order_id=%d";
+	private String	deleteFromDatabase	= "DELETE FROM order_details WHERE order_id=%d";
 
 	// Retrieves all OrderDetails objects from repository
 	@Override
@@ -109,10 +111,19 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 		return true;
 	}
 
+	public boolean deleteObject(int id) throws SQLException {
+		statement = connector.createStatement();
+		results = statement.executeQuery(String.format(deleteFromDatabase, id));
+
+		return true;
+	}
+	
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
 	private DetailModel convertBody(String body) {
 		return gson.fromJson(body, DetailModel.class);
 	}
+
+	
 
 }

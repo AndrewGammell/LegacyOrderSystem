@@ -20,17 +20,18 @@ import com.sogeti.model.UserModel;
 
 public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
-	private static final Logger logger = Logger.getLogger(UsersRepositoryImpl.class);
-	private Connection connector = RepositoryConnector.getConnection();
-	private Statement statement;
-	private ResultSet results;
-	private SessionFactory factory;
-	private Session session;
-	private Gson gson = new Gson();
+	private static final Logger	logger		= Logger.getLogger(UsersRepositoryImpl.class);
+	private Connection			connector	= RepositoryConnector.getConnection();
+	private Statement			statement;
+	private ResultSet			results;
+	private SessionFactory		factory;
+	private Session				session;
+	private Gson				gson		= new Gson();
 
-	private String getUsers = "SELECT * FROM person";
-	private String getUserById = "SELECT * FROM person WHERE id=%d";
-	private String getUserByEmailAndPassword = "SELECT * FROM person WHERE email = '%s' AND password = '%s'";
+	private String	getUsers					= "SELECT * FROM person";
+	private String	getUserById					= "SELECT * FROM person WHERE id=%d";
+	private String	getUserByEmailAndPassword	= "SELECT * FROM person WHERE email = '%s' AND password = '%s'";
+	private String	deleteFromDatabase			= "DELETE FROM person WHERE id=%d";
 
 	// Retrieves all the User objects from the repository
 	public List<UserModel> getAllObjects() throws SQLException {
@@ -132,10 +133,19 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 		}
 		return true;
 	}
+	
+	public boolean deleteObject(int id) throws SQLException {
+		statement = connector.createStatement();
+		results = statement.executeQuery(String.format(deleteFromDatabase, id));
+		
+		return true;
+	}
 
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
 	private UserModel convertBody(String body) {
 		return gson.fromJson(body, UserModel.class);
 	}
+	
+	
 }

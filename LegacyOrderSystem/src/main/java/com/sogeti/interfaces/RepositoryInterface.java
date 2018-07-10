@@ -11,6 +11,7 @@ public interface RepositoryInterface<T> {
 
 	boolean updateObject(String body);
 	
-	public boolean createObject(String body);
+	boolean createObject(String body);
 
+	boolean deleteObject(int id) throws SQLException;
 }

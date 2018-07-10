@@ -21,12 +21,13 @@ import com.sogeti.model.OrderModel;
 public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 
 	private static final Logger logger = Logger.getLogger(OrdersRepositoryImpl.class);
-	private Connection connector = RepositoryConnector.getConnection();
-	private Statement statement;
-	private ResultSet results;
-	private SessionFactory factory;
-	private Session session;
-	private Gson gson = new Gson();
+
+	private Connection		connector	= RepositoryConnector.getConnection();
+	private Statement		statement;
+	private ResultSet		results;
+	private SessionFactory	factory;
+	private Session			session;
+	private Gson			gson		= new Gson();
 
 	private String rightJoinQuery = "SELECT * FROM orders RIGHT OUTER JOIN orders_details ON"
 			+ " orders.order_id = orders_details.order_id";
@@ -34,7 +35,10 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 	private String rightJoinFindById = "SELECT * FROM orders RIGHT OUTER JOIN orders_details ON orders.order_id"
 			+ " = orders_details.order_id WHERE orders.order_id=%d";
 
+	private String deleteFromDatabase = "DELETE FROM orders where order_id=%d";
+
 	// Retrieves all Order objects from the repository
+
 	public List<OrderModel> getAllObjects() throws SQLException {
 		List<OrderModel> ordersList = new ArrayList<>();
 		statement = connector.createStatement();
@@ -76,7 +80,7 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 			session.beginTransaction();
 			session.update(convertBody(body));
 			session.getTransaction().commit();
-			
+
 		} catch (Exception e) {
 			logger.error(e);
 			if (session.getTransaction().isActive()) {
@@ -109,10 +113,19 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 		return true;
 	}
 
+	public boolean deleteObject(int id) throws SQLException {
+		statement = connector.createStatement();
+		results = statement.executeQuery(String.format(deleteFromDatabase, id));
+
+		return true;
+	}
+	
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
 	private OrderModel convertBody(String body) {
 		return gson.fromJson(body, OrderModel.class);
 	}
+
+	
 
 }

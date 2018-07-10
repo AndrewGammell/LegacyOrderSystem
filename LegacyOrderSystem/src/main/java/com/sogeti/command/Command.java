@@ -13,15 +13,15 @@ import com.sogeti.repository.UsersRepositoryImpl;
 
 public class Command {
 
-	private Logger logger = Logger.getLogger(Command.class);
-	private Gson gson = new Gson();
-	private RepositoryInterface repo;
+	private Logger				logger	= Logger.getLogger(Command.class);
+	private Gson				gson	= new Gson();
+	private RepositoryInterface	repo;
 
-	private queryQuantity quantity;
-	private queryType type;
-	private queryTable table;
-	private String body;
-	private Map<String, String> values;
+	private queryQuantity		quantity;
+	private queryType			type;
+	private queryTable			table;
+	private String				body;
+	private Map<String, String>	values;
 
 	public enum queryQuantity {
 		SINGLE, MULTIPLE
@@ -45,17 +45,17 @@ public class Command {
 	private void selectRepository() {
 
 		switch (table) {
-		case ORDERS:
-			repo = new OrdersRepositoryImpl();
+			case ORDERS:
+				repo = new OrdersRepositoryImpl();
 			break;
-		case DETAILS:
-			repo = new DetailsRepositoryImpl();
+			case DETAILS:
+				repo = new DetailsRepositoryImpl();
 			break;
-		case USERS:
-			repo = new UsersRepositoryImpl();
+			case USERS:
+				repo = new UsersRepositoryImpl();
 			break;
-		default:
-			repo = null;
+			default:
+				repo = null;
 
 		}
 	}
@@ -64,16 +64,16 @@ public class Command {
 	private String makeQuery() throws SQLException {
 
 		switch (type) {
-		case GET:
-			return getObject();
-		case PUT:
-			return putObject();
-		case POST:
-			return postObject();
-		case DELETE:
-			return deleteObject();
-		default:
-			return null;
+			case GET:
+				return getObject();
+			case PUT:
+				return putObject();
+			case POST:
+				return postObject();
+			case DELETE:
+				return deleteObject();
+			default:
+				return null;
 
 		}
 	}
@@ -82,17 +82,17 @@ public class Command {
 	private String getObject() throws SQLException {
 
 		switch (quantity) {
-		case SINGLE:
-			if (repo instanceof UsersRepositoryImpl) {
-				logger.debug("Returning single user");
-				return gson.toJson(((UsersRepositoryImpl) repo).getUserWithCredentials(values.get("email"),
-						values.get("password")));
-			}
-			return gson.toJson(repo.getObjectById(Integer.valueOf(values.get("id"))));
-		case MULTIPLE:
-			return gson.toJson(repo.getAllObjects());
-		default:
-			return null;
+			case SINGLE:
+				if (repo instanceof UsersRepositoryImpl) {
+					logger.debug("Returning single user");
+					return gson.toJson(((UsersRepositoryImpl) repo).getUserWithCredentials(values.get("email"),
+							values.get("password")));
+				}
+				return gson.toJson(repo.getObjectById(Integer.valueOf(values.get("id"))));
+			case MULTIPLE:
+				return gson.toJson(repo.getAllObjects());
+			default:
+				return null;
 		}
 	}
 
@@ -100,39 +100,39 @@ public class Command {
 	private String putObject() {
 
 		switch (quantity) {
-		case SINGLE:
-			return String.valueOf(repo.updateObject(body));
-		case MULTIPLE:
-			return null;
-		default:
-			return null;
+			case SINGLE:
+				return String.valueOf(repo.updateObject(body));
+			case MULTIPLE:
+				return null;
+			default:
+				return null;
 		}
 	}
 
 	// This method creates the object/s from the selected repository
 	private String postObject() {
-	logger.info("creating object on DB");
+		logger.info("creating object on DB");
 
 		switch (quantity) {
-		case SINGLE:
-			return String.valueOf(repo.createObject(body));
-		case MULTIPLE:
-			return null;
-		default:
-			return null;
+			case SINGLE:
+				return String.valueOf(repo.createObject(body));
+			case MULTIPLE:
+				return null;
+			default:
+				return null;
 		}
 	}
 
 	// This method removes the object/s from the selected repository
-	private String deleteObject() {
+	private String deleteObject() throws SQLException {
 
 		switch (quantity) {
-		case SINGLE:
-			return null;
-		case MULTIPLE:
-			return null;
-		default:
-			return null;
+			case SINGLE:
+				return String.valueOf(repo.deleteObject(Integer.valueOf(values.get("id"))));
+			case MULTIPLE:
+				return null;
+			default:
+				return null;
 		}
 	}
 
