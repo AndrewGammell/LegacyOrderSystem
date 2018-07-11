@@ -10,7 +10,6 @@ import com.sogeti.model.UserModel;
 public class EntityAdapter {
 
 	private EntityAdapter() {
-
 	}
 
 	public static OrderModel parseOrder(ResultSet results) throws SQLException {
@@ -24,14 +23,17 @@ public class EntityAdapter {
 		order.setDateReceived(results.getDate("date_received"));
 		order.setUpdatedDate(results.getDate("updated_date"));
 		order.setUpdatedStaffId(results.getString("updated_staff_id"));
-		
-		switch(results.getString("status").toLowerCase()) {
-		case "shipped": order.setStatus(OrderModel.Status.SHIPPED);  
-		break;
-		case "received": order.setStatus(OrderModel.Status.SHIPPED);
-		break;
-		case "cancelled" : order.setStatus(OrderModel.Status.CANCELLED);
-		break;
+
+		switch (results.getString("status").toLowerCase()) {
+			case "shipped":
+				order.setStatus(OrderModel.Status.SHIPPED);
+			break;
+			case "received":
+				order.setStatus(OrderModel.Status.RECEIVED);
+			break;
+			case "cancelled":
+				order.setStatus(OrderModel.Status.CANCELLED);
+			break;
 		}
 
 		return order;

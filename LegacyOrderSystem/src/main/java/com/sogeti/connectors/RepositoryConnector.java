@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.sogeti.application.Application;
-
 public final class RepositoryConnector {
 
 	private static final Logger logger = Logger.getLogger(RepositoryConnector.class);
@@ -21,7 +19,7 @@ public final class RepositoryConnector {
 		Connection con = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost/legacy?" + "user=root&password=secret");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/legacy?user=root&password=secret");
 		} catch (SQLException sqle) {
 			logger.error(sqle);
 		} catch (ClassNotFoundException cnfe) {

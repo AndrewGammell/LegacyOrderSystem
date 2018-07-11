@@ -9,33 +9,32 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="person",
-	uniqueConstraints= {@UniqueConstraint(columnNames= {"id"})})
+@Table(name = "person", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
 public class UserModel {
 
 	@Id
-	@Column(name="id", nullable=false, length=11)
+	@Column(name = "id", nullable = false, length = 11)
 	private int id;
-	
-	@Column(name="firstname",nullable=false, length=45)
+
+	@Column(name = "firstname", nullable = false, length = 45)
 	private String firstName;
-	
-	@Column(name="lastname",nullable=false, length=45)
+
+	@Column(name = "lastname", nullable = false, length = 45)
 	private String lastName;
-	
-	@Column(name="email",nullable=false, length=45)
+
+	@Column(name = "email", nullable = false, length = 45)
 	private String email;
-	
-	@Column(name="password",nullable=false, length=45)
+
+	@Column(name = "password", nullable = false, length = 45)
 	private String password;
-	
-	@Column(name="dob",nullable=false, length=45)
+
+	@Column(name = "dob", nullable = false, length = 45)
 	private Date dateOfBirth;
-	
-	@Column(name="lastCreated",nullable=false, length=45)
+
+	@Column(name = "lastCreated", nullable = false, length = 45)
 	private Date createdDate;
-	
-	@Column(name="lastUpdated",nullable=true, length=45)
+
+	@Column(name = "lastUpdated", nullable = true, length = 45)
 	private Date updatedDate;
 
 	public UserModel() {
@@ -52,7 +51,7 @@ public class UserModel {
 		this.dateOfBirth = dateOfBirth;
 		this.createdDate = createdDate;
 	}
-	
+
 	public int getId() {
 		return id;
 	}

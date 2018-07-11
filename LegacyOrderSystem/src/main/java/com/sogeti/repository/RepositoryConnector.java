@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.sogeti.application.Application;
-
 public final class RepositoryConnector {
 
 	private static final Logger logger = Logger.getLogger(RepositoryConnector.class);

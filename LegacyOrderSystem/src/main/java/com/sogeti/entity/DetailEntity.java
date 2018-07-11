@@ -3,21 +3,21 @@ package com.sogeti.entity;
 import java.util.Date;
 
 public class DetailEntity {
-	private int OrderId;
-	private int productId;
-	private int quantity;
-	private int unitPrice;
-	private String createStaffId;
-	private Date createdDate;
-	private String updatedStaffId;
-	private Date updatedDate;
+	private int		orderId;
+	private int		productId;
+	private int		quantity;
+	private int		unitPrice;
+	private String	createStaffId;
+	private Date	createdDate;
+	private String	updatedStaffId;
+	private Date	updatedDate;
 
 	public int getOrderId() {
-		return OrderId;
+		return orderId;
 	}
 
 	public void setOrderId(int orderId) {
-		OrderId = orderId;
+		orderId = orderId;
 	}
 
 	public int getProductId() {
@@ -78,7 +78,7 @@ public class DetailEntity {
 
 	@Override
 	public String toString() {
-		return "DetailEntity [OrderId=" + OrderId + ", productId=" + productId + ", quantity=" + quantity
+		return "DetailEntity [OrderId=" + orderId + ", productId=" + productId + ", quantity=" + quantity
 				+ ", unitPrice=" + unitPrice + ", createStaffId=" + createStaffId + ", createdDate=" + createdDate
 				+ ", updatedStaffId=" + updatedStaffId + ", updatedDate=" + updatedDate + "]";
 	}
@@ -87,7 +87,7 @@ public class DetailEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + OrderId;
+		result = prime * result + orderId;
 		result = prime * result + ((createStaffId == null) ? 0 : createStaffId.hashCode());
 		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result + productId;
@@ -110,7 +110,7 @@ public class DetailEntity {
 			return false;
 		}
 		DetailEntity other = (DetailEntity) obj;
-		if (OrderId != other.OrderId) {
+		if (orderId != other.orderId) {
 			return false;
 		}
 		if (createStaffId == null) {

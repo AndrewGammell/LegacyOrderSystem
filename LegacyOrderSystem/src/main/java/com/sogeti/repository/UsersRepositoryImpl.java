@@ -1,6 +1,7 @@
 package com.sogeti.repository;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,9 +32,10 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 	private String	getUsers					= "SELECT * FROM person";
 	private String	getUserById					= "SELECT * FROM person WHERE id=%d";
 	private String	getUserByEmailAndPassword	= "SELECT * FROM person WHERE email = '%s' AND password = '%s'";
-	private String	deleteFromDatabase			= "DELETE FROM person WHERE id=%d";
+	private String	deleteFromDatabase			= "DELETE FROM person WHERE id=?";
 
 	// Retrieves all the User objects from the repository
+	@Override
 	public List<UserModel> getAllObjects() throws SQLException {
 		List<UserModel> users = new ArrayList<>();
 
@@ -133,11 +135,20 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 		}
 		return true;
 	}
-	
-	public boolean deleteObject(int id) throws SQLException {
-		statement = connector.createStatement();
-		results = statement.executeQuery(String.format(deleteFromDatabase, id));
-		
+
+	// This method deletes an object on the database with the id passed in
+	@Override
+	public boolean deleteObject(int id) {
+
+		try (PreparedStatement st = connector.prepareStatement(deleteFromDatabase)) {
+
+			st.setInt(1, id);
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -146,6 +157,5 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 	private UserModel convertBody(String body) {
 		return gson.fromJson(body, UserModel.class);
 	}
-	
-	
+
 }

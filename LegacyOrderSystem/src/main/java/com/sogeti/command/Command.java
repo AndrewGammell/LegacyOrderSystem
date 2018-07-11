@@ -37,12 +37,15 @@ public class Command {
 
 	public String executeCommand() throws SQLException {
 		logger.debug("executing the command");
+
 		selectRepository();
+
 		return makeQuery();
 	}
 
 	// This method selects the correct repository based on the table being queried
 	private void selectRepository() {
+		logger.debug("selecting repository");
 
 		switch (table) {
 			case ORDERS:
@@ -62,6 +65,7 @@ public class Command {
 
 	// This method selects a method based on the query type
 	private String makeQuery() throws SQLException {
+		logger.debug("Chosing action to take");
 
 		switch (type) {
 			case GET:
@@ -80,6 +84,7 @@ public class Command {
 
 	// This method gets the object/s from the selected repository
 	private String getObject() throws SQLException {
+		logger.debug("getting objects");
 
 		switch (quantity) {
 			case SINGLE:
@@ -98,6 +103,7 @@ public class Command {
 
 	// This method updates the object/s from the selected repository
 	private String putObject() {
+		logger.debug("updating objects");
 
 		switch (quantity) {
 			case SINGLE:
@@ -111,7 +117,7 @@ public class Command {
 
 	// This method creates the object/s from the selected repository
 	private String postObject() {
-		logger.info("creating object on DB");
+		logger.info("creating object");
 
 		switch (quantity) {
 			case SINGLE:
@@ -125,6 +131,7 @@ public class Command {
 
 	// This method removes the object/s from the selected repository
 	private String deleteObject() throws SQLException {
+		logger.debug("deleting object");
 
 		switch (quantity) {
 			case SINGLE:

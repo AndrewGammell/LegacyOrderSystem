@@ -20,25 +20,27 @@ import com.sogeti.model.UserModel;
 
 public class CreateCommandTestCases {
 
-	private final String REMOVE_ORDER_FROM_DB = "DELETE FROM orders WHERE order_id=%s";
-	private final String REMOVE_DETAIL_FROM_DB = "DELETE FROM order_details WHERE order_id=%s";
-	private final String REMOVE_USER_FROM_DB = "DELETE FROM person WHERE id=%s";
+	private final String	REMOVE_ORDER_FROM_DB	= "DELETE FROM orders WHERE order_id=%s";
+	private final String	REMOVE_DETAIL_FROM_DB	= "DELETE FROM order_details WHERE order_id=%s";
+	private final String	REMOVE_USER_FROM_DB		= "DELETE FROM person WHERE id=%s";
 
-	private Gson gson = new Gson();
-	private Command command;
-	private final String NULL = null;
-	private final int ORDER_ID = 1987;
-	private final int USER_ID = 123456789;
-	private String response;
+	private Gson			gson		= new Gson();
+	private Command			command;
+	private final String	NULL		= null;
+	private final int		ORDER_ID	= 1987;
+	private final int		USER_ID		= 123456789;
+	private String			response;
 
 	@Test
 	public void testExecutePostValidOrderCommand() {
 		command = new Command();
+		System.out.println(getValidOrderJson());
 		command.setBody(getValidOrderJson());
 		command.setType(Command.queryType.POST);
 		command.setTable(Command.queryTable.ORDERS);
 		command.setQuantity(Command.queryQuantity.SINGLE);
 
+		System.out.println(gson.toJson(command));
 		try {
 			response = command.executeCommand();
 			assertTrue(Boolean.valueOf(response));
@@ -293,7 +295,6 @@ public class CreateCommandTestCases {
 
 		UserModel user = new UserModel();
 		user.setId(USER_ID);
-		;
 		user.setFirstName("John");
 		user.setLastName("Doenut");
 		user.setEmail("test@test.test");

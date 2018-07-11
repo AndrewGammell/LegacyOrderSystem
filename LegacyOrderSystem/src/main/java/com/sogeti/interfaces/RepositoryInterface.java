@@ -10,7 +10,7 @@ public interface RepositoryInterface<T> {
 	T getObjectById(int id) throws SQLException;
 
 	boolean updateObject(String body);
-	
+
 	boolean createObject(String body);
 
 	boolean deleteObject(int id) throws SQLException;

@@ -1,6 +1,7 @@
 package com.sogeti.repository;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,10 +36,11 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 	private String rightJoinFindById = "SELECT * FROM orders RIGHT OUTER JOIN orders_details ON orders.order_id"
 			+ " = orders_details.order_id WHERE orders.order_id=%d";
 
-	private String deleteFromDatabase = "DELETE FROM orders where order_id=%d";
+	private String deleteFromDatabase = "DELETE FROM orders where order_id=?";
 
 	// Retrieves all Order objects from the repository
 
+	@Override
 	public List<OrderModel> getAllObjects() throws SQLException {
 		List<OrderModel> ordersList = new ArrayList<>();
 		statement = connector.createStatement();
@@ -56,6 +58,7 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 
 	// Retrieves an Order object from the repository using the int id passed into
 	// the method
+	@Override
 	public OrderModel getObjectById(int orderId) throws SQLException {
 
 		OrderModel order = null;
@@ -113,19 +116,27 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 		return true;
 	}
 
-	public boolean deleteObject(int id) throws SQLException {
-		statement = connector.createStatement();
-		results = statement.executeQuery(String.format(deleteFromDatabase, id));
+	// This method deletes an object on the database with the id passed in
+	@Override
+	public boolean deleteObject(int id) {
+
+		try (PreparedStatement st = connector.prepareStatement(deleteFromDatabase)) {
+
+			st.setInt(1, id);
+			st.executeUpdate();
+
+		} catch (Exception e) {
+			logger.error(e);
+			return false;
+		}
 
 		return true;
 	}
-	
+
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
 	private OrderModel convertBody(String body) {
 		return gson.fromJson(body, OrderModel.class);
 	}
-
-	
 
 }

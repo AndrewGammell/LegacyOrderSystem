@@ -5,15 +5,22 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import com.google.gson.Gson;
 import com.sogeti.command.Command;
+import com.sogeti.model.OrderModel;
 
 // TODO WRITE INVALID AND NULL TEST CASES
 public class GetCommandTestCases {
+	
+	private Command command;
+	private final int ORDER_ID = 123;
+	private Gson gson = new Gson();
 
 	@Test
 	public void testExecuteGetOrderCommand() {
@@ -100,7 +107,7 @@ public class GetCommandTestCases {
 	private Command getOrderCommand() {
 
 		Map<String, String> values = new HashMap<>();
-		values.put("id", "100");
+		values.put("id", String.valueOf(ORDER_ID));
 
 		Command command = new Command();
 		command.setType(Command.queryType.GET);
@@ -124,7 +131,7 @@ public class GetCommandTestCases {
 	private Command getDetailCommand() {
 
 		Map<String, String> values = new HashMap<>();
-		values.put("id", "100");
+		values.put("id", String.valueOf(ORDER_ID));
 
 		Command command = new Command();
 		command.setType(Command.queryType.GET);
@@ -185,6 +192,29 @@ public class GetCommandTestCases {
 		command.setValues(values);
 
 		return command;
+	}
+	
+	private String orderJson() {
+
+		OrderModel order = new OrderModel();
+		order.setOrderId(ORDER_ID);
+		order.setCreatedDate(new Date());
+		order.setCreatedStaffId("999");
+		order.setStatus(OrderModel.Status.SHIPPED);
+		order.setDateOrdered(new Date());
+
+		return gson.toJson(order);
+	}
+
+	private void createOrderForTest() throws SQLException {
+
+		command = new Command();
+		command.setBody(orderJson());
+		command.setType(Command.queryType.POST);
+		command.setTable(Command.queryTable.ORDERS);
+		command.setQuantity(Command.queryQuantity.SINGLE);
+		command.executeCommand();
+
 	}
 
 }

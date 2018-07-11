@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class UserEntity {
 
-	private int id;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String password;
-	private Date dateOfBirth;
-	private Date createdDate;
-	private Date updatedDate;
+	private int		id;
+	private String	firstName;
+	private String	lastName;
+	private String	email;
+	private String	password;
+	private Date	dateOfBirth;
+	private Date	createdDate;
+	private Date	updatedDate;
 
 	public UserEntity() {
 
