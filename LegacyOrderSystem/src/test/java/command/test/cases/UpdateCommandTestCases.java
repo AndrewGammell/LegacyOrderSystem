@@ -4,36 +4,29 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
 
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.sogeti.command.Command;
-import com.sogeti.connectors.RepositoryConnector;
 import com.sogeti.model.DetailModel;
 import com.sogeti.model.OrderModel;
 
-public class UpdateCommandTestCase {
+public class UpdateCommandTestCases {
 
-	private final String REMOVE_ORDER_FROM_DB = "DELETE FROM orders WHERE order_id=%s";
-	private final String REMOVE_DETAIL_FROM_DB = "DELETE FROM order_details WHERE order_id=%s";
-	private final String REMOVE_USER_FROM_DB = "DELETE FROM person WHERE id=%s";
-
-	private Gson gson = new Gson();
-	private Command command;
-	private final String NULL = null;
-	private final int ORDER_ID = 1987;
-	private final int USER_ID = 123456789;
-	private String response;
+	private Gson			gson		= new Gson();
+	private Command			command;
+	private final String	NULL		= null;
+	private final int		ORDER_ID	= TestResources.ORDER_ID;
+	private final int		USER_ID		= TestResources.USER_ID;
+	private String			response;
 
 	@Test
 	public void testExecutePutValidOrderCommand() throws SQLException {
 
-		createOrderForTest();
+		TestResources.createOrderForTest();
 
 		command = new Command();
 		command.setBody(updateValidOrderJson());
@@ -45,17 +38,18 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertTrue(Boolean.valueOf(response));
 
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanOrderTable();
 		}
 	}
 
 	@Test
 	public void testExecutePutInvalidOrderCommand() throws SQLException {
 
-		createOrderForTest();
+		TestResources.createOrderForTest();
 
 		command = new Command();
 		command.setBody(updateInvalidOrderJson());
@@ -67,17 +61,18 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertFalse(Boolean.valueOf(response));
 
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanOrderTable();
 		}
 	}
 
 	@Test
 	public void testExecutePutNullOrderCommand() throws SQLException {
 
-		createOrderForTest();
+		TestResources.createOrderForTest();
 
 		command = new Command();
 		command.setBody(NULL);
@@ -89,18 +84,19 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertFalse(Boolean.valueOf(response));
 
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanOrderTable();
 		}
 	}
 
 	@Test
 	public void testExecutePutValidDetailCommand() throws SQLException {
 
-		createOrderForTest();
-		createDetailForTest();
+		TestResources.createOrderForTest();
+		TestResources.createDetailsForTest();
 
 		command = new Command();
 		command.setBody(updateValidDetailsJson());
@@ -112,18 +108,19 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertTrue(Boolean.valueOf(response));
 
-			cleanDetailTable();
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanDetailsTable();
+			TestResources.cleanOrderTable();
 		}
 	}
 
 	@Test
 	public void testExecutePutInvalidDetailCommand() throws SQLException {
 
-		createOrderForTest();
+		TestResources.createOrderForTest();
 
 		command = new Command();
 		command.setBody(updateInvalidDetailJson());
@@ -135,17 +132,18 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertFalse(Boolean.valueOf(response));
 
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanOrderTable();
 		}
 	}
 
 	@Test
 	public void testExecutePutNullDetailsCommand() throws SQLException {
 
-		createOrderForTest();
+		TestResources.createOrderForTest();
 
 		command = new Command();
 		command.setBody(NULL);
@@ -157,10 +155,11 @@ public class UpdateCommandTestCase {
 			response = command.executeCommand();
 			assertFalse(Boolean.valueOf(response));
 
-			cleanOrderTable();
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
+		} finally {
+			TestResources.cleanOrderTable();
 		}
 	}
 
@@ -183,7 +182,7 @@ public class UpdateCommandTestCase {
 	private String updateInvalidOrderJson() {
 
 		OrderModel order = new OrderModel();
-		order.setOrderId(1987);
+		order.setOrderId(123);
 		order.setCreatedDate(null);
 		order.setCreatedStaffId("999");
 		order.setStatus(OrderModel.Status.SHIPPED);
@@ -192,42 +191,6 @@ public class UpdateCommandTestCase {
 		order.setUpdatedStaffId("12345");
 
 		return gson.toJson(order);
-	}
-
-	private String orderJson() {
-
-		OrderModel order = new OrderModel();
-		order.setOrderId(ORDER_ID);
-		order.setCreatedDate(new Date());
-		order.setCreatedStaffId("999");
-		order.setStatus(OrderModel.Status.SHIPPED);
-		order.setDateOrdered(new Date());
-
-		return gson.toJson(order);
-	}
-
-	private void createOrderForTest() throws SQLException {
-
-		command = new Command();
-		command.setBody(orderJson());
-		command.setType(Command.queryType.POST);
-		command.setTable(Command.queryTable.ORDERS);
-		command.setQuantity(Command.queryQuantity.SINGLE);
-		command.executeCommand();
-
-	}
-
-	private void cleanOrderTable() {
-
-		Connection connector = RepositoryConnector.getConnection();
-		Statement statement;
-
-		try {
-			statement = connector.createStatement();
-			statement.execute(String.format(REMOVE_ORDER_FROM_DB, ORDER_ID));
-		} catch (SQLException sqle) {
-
-		}
 	}
 
 	private String updateValidDetailsJson() {
@@ -260,40 +223,4 @@ public class UpdateCommandTestCase {
 		return gson.toJson(detail);
 	}
 
-	private String detailsJson() {
-
-		DetailModel detail = new DetailModel();
-		detail.setOrderId(ORDER_ID);
-		detail.setProductId(12345);
-		detail.setQuantity(20);
-		detail.setUnitPrice(13);
-		detail.setCreatedStaffId("987654321");
-		detail.setCreatedDate(new Date());
-
-		return gson.toJson(detail);
-	}
-
-	private void createDetailForTest() throws SQLException {
-
-		command = new Command();
-		command.setBody(detailsJson());
-		command.setType(Command.queryType.POST);
-		command.setTable(Command.queryTable.ORDERS);
-		command.setQuantity(Command.queryQuantity.SINGLE);
-		command.executeCommand();
-
-	}
-
-	private void cleanDetailTable() {
-
-		Connection connector = RepositoryConnector.getConnection();
-		Statement statement;
-
-		try {
-			statement = connector.createStatement();
-			statement.execute(String.format(REMOVE_DETAIL_FROM_DB, ORDER_ID));
-		} catch (SQLException sqle) {
-
-		}
-	}
 }

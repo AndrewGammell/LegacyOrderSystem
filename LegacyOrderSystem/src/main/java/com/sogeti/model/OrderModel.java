@@ -11,34 +11,37 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "orders", uniqueConstraints = { @UniqueConstraint(columnNames = { "order_id" }) })
+@Table(name = "orders", uniqueConstraints = { @UniqueConstraint(columnNames = { "orderId" }) })
 public class OrderModel {
 
 	@Id
-	@Column(name = "order_id", nullable = false, length = 11)
+	@Column(name = "orderId", nullable = false, length = 11)
 	private int orderId;
 
-	@Column(name = "date_ordered", nullable = false)
+	@Column(name = "dateOrdered", nullable = false)
 	private Date dateOrdered;
 
-	@Column(name = "date_received", nullable = true)
+	@Column(name = "dateReceived", nullable = true)
 	private Date dateReceived;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private Status status;
 
-	@Column(name = "created_staff_id", nullable = false, length = 11)
+	@Column(name = "createdStaffId", nullable = false, length = 11)
 	private String createdStaffId;
 
-	@Column(name = "created_date", nullable = false)
+	@Column(name = "createdDate", nullable = false)
 	private Date createdDate;
 
-	@Column(name = "updated_staff_id", nullable = true, length = 11)
+	@Column(name = "updatedStaffId", nullable = true, length = 11)
 	private String updatedStaffId;
 
-	@Column(name = "updated_date", nullable = true)
+	@Column(name = "updatedDate", nullable = true)
 	private Date updatedDate;
+
+	@Column(name = "customerId", nullable = false, length = 11)
+	private int customerId;
 
 	public enum Status {
 		SHIPPED, RECEIVED, CANCELLED
@@ -46,6 +49,14 @@ public class OrderModel {
 
 	public int getOrderId() {
 		return orderId;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 
 	public void setOrderId(int orderId) {

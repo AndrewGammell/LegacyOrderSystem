@@ -30,22 +30,23 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 	private Session			session;
 	private Gson			gson		= new Gson();
 
-	private String rightJoinQuery = "SELECT * FROM orders RIGHT OUTER JOIN orders_details ON"
-			+ " orders.order_id = orders_details.order_id";
+	// the %d is used by the string format method to set the value
+	private String rightJoinQuery = "SELECT * FROM orders where orders.customerId = %d";
 
-	private String rightJoinFindById = "SELECT * FROM orders RIGHT OUTER JOIN orders_details ON orders.order_id"
-			+ " = orders_details.order_id WHERE orders.order_id=%d";
+	// the %d is used by the string format method to set the value
+	private String rightJoinFindById = "SELECT * FROM orders where orders.orderId = %d";
 
-	private String deleteFromDatabase = "DELETE FROM orders where order_id=?";
+	// the ? in the string is used by the prepared statement to set the value
+	private String deleteFromDatabase = "DELETE FROM orders where orderId=?";
 
 	// Retrieves all Order objects from the repository
 
 	@Override
-	public List<OrderModel> getAllObjects() throws SQLException {
+	public List<OrderModel> getAllObjects(int customerId) throws SQLException {
 		List<OrderModel> ordersList = new ArrayList<>();
 		statement = connector.createStatement();
 
-		results = statement.executeQuery(rightJoinQuery);
+		results = statement.executeQuery(String.format(rightJoinQuery, customerId));
 
 		while (results.next()) {
 			OrderModel order = EntityAdapter.parseOrder(results);
@@ -65,11 +66,13 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 		statement = connector.createStatement();
 
 		results = statement.executeQuery(String.format(rightJoinFindById, orderId));
-		results.next();
+		logger.debug("orderId passed in was: " + orderId);
 
+		results.next();
 		order = EntityAdapter.parseOrder(results);
 
-		logger.info("returning order retrived by id");
+		logger.debug("returning order retrived by id");
+
 		return order;
 	}
 

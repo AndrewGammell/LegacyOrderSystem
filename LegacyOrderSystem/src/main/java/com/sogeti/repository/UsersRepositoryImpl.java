@@ -36,7 +36,7 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
 	// Retrieves all the User objects from the repository
 	@Override
-	public List<UserModel> getAllObjects() throws SQLException {
+	public List<UserModel> getAllObjects(int id) throws SQLException {
 		List<UserModel> users = new ArrayList<>();
 
 		statement = connector.createStatement();

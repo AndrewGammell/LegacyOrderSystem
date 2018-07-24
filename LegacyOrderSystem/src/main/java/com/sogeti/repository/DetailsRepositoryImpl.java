@@ -32,18 +32,18 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 	private Session			session;
 	private Gson			gson		= new Gson();
 
-	private String	getAllDetails		= "SELECT * FROM orders_details";
-	private String	getDetailsById		= "SELECT * FROM orders_details WHERE order_id=%d";
-	private String	deleteFromDatabase	= "DELETE FROM order_details WHERE order_id=?";
+	private String	getAllDetails		= "SELECT * FROM orders_details WHERE customerId=%d";
+	private String	getDetailsById		= "SELECT * FROM orders_details WHERE orderId=%d";
+	private String	deleteFromDatabase	= "DELETE FROM orders_details WHERE orderId=?";
 
 	// Retrieves all OrderDetails objects from repository
 	@Override
-	public List<DetailModel> getAllObjects() throws SQLException {
+	public List<DetailModel> getAllObjects(int customerId) throws SQLException {
 
 		List<DetailModel> list = new ArrayList<>();
 
 		statement = connector.createStatement();
-		results = statement.executeQuery(getAllDetails);
+		results = statement.executeQuery(String.format(getAllDetails, customerId));
 
 		while (results.next()) {
 			list.add(EntityAdapter.parseDetails(results));
@@ -81,7 +81,7 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 			session.update(convertBody(body));
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.debug(e);
 			if (session.getTransaction().isActive()) {
 				session.getTransaction().rollback();
 			}

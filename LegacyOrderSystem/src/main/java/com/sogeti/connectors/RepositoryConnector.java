@@ -15,11 +15,12 @@ public final class RepositoryConnector {
 
 	// The purpose of this method is to control the construction of the
 	// RepositoryConnector without making it a singleton.
+	// TODO REMOVE STATIC KEYWORD TO USE PROPERTY FILE
 	public static Connection getConnection() {
 		Connection con = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost/legacy?user=root&password=secret");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/legacy?" + "user=root&password=secret");
 		} catch (SQLException sqle) {
 			logger.error(sqle);
 		} catch (ClassNotFoundException cnfe) {

@@ -3,15 +3,16 @@ package com.sogeti.entity;
 import java.util.Date;
 
 public class OrderEntity {
-	private int orderId;
-	private Date dateOrdered;
-	private Date dateRecieved;
-	private String status;
-	private String createdStaffId;
-	private Date createdDate;
-	private String updatedStaffId;
-	private Date updatedDate;
-	private DetailEntity details;
+	private int				orderId;
+	private Date			dateOrdered;
+	private Date			dateRecieved;
+	private String			status;
+	private String			createdStaffId;
+	private Date			createdDate;
+	private String			updatedStaffId;
+	private Date			updatedDate;
+	private DetailEntity	details;
+	private int				customerId;
 
 	public DetailEntity getDetails() {
 		return details;
@@ -19,6 +20,10 @@ public class OrderEntity {
 
 	public void setDetails(DetailEntity details) {
 		this.details = details;
+	}
+
+	public int getCustomerId() {
+		return customerId;
 	}
 
 	public int getOrderId() {

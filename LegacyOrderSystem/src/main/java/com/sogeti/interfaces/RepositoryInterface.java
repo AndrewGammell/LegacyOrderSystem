@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface RepositoryInterface<T> {
 
-	List<T> getAllObjects() throws SQLException;
+	List<T> getAllObjects(int customerId) throws SQLException;
 
 	T getObjectById(int id) throws SQLException;
 

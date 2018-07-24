@@ -16,13 +16,14 @@ public class EntityAdapter {
 
 		OrderModel order = new OrderModel();
 
-		order.setOrderId(results.getInt("order_id"));
-		order.setCreatedDate(results.getDate("created_date"));
-		order.setCreatedStaffId(results.getString("created_staff_id"));
-		order.setDateOrdered(results.getDate("date_ordered"));
-		order.setDateReceived(results.getDate("date_received"));
-		order.setUpdatedDate(results.getDate("updated_date"));
-		order.setUpdatedStaffId(results.getString("updated_staff_id"));
+		order.setOrderId(results.getInt("orderId"));
+		order.setCreatedDate(results.getDate("createdDate"));
+		order.setCreatedStaffId(results.getString("createdStaffId"));
+		order.setDateOrdered(results.getDate("dateOrdered"));
+		order.setDateReceived(results.getDate("dateReceived"));
+		order.setUpdatedDate(results.getDate("updatedDate"));
+		order.setUpdatedStaffId(results.getString("updatedStaffId"));
+		order.setCustomerId(results.getInt("customerId"));
 
 		switch (results.getString("status").toLowerCase()) {
 			case "shipped":
@@ -43,14 +44,15 @@ public class EntityAdapter {
 
 		DetailModel details = new DetailModel();
 
-		details.setCreatedDate(results.getDate("created_date"));
-		details.setCreatedStaffId(results.getString("created_staff_id"));
+		details.setCreatedDate(results.getDate("createdDate"));
+		details.setCreatedStaffId(results.getString("createdStaffId"));
 		details.setQuantity(results.getInt("quantity"));
-		details.setOrderId(results.getInt("order_id"));
-		details.setProductId(results.getInt("product_id"));
-		details.setUnitPrice(results.getInt("unit_price"));
-		details.setUpdatedDate(results.getDate("updated_date"));
-		details.setUpdatedStaffId(results.getString("updated_staff_id"));
+		details.setOrderId(results.getInt("orderId"));
+		details.setProductId(results.getInt("productId"));
+		details.setUnitPrice(results.getInt("unitPrice"));
+		details.setUpdatedDate(results.getDate("updatedDate"));
+		details.setUpdatedStaffId(results.getString("updatedStaffId"));
+		details.setCustomerId(results.getInt("customerId"));
 
 		return details;
 	}

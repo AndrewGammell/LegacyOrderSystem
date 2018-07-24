@@ -49,16 +49,19 @@ public class Command {
 
 		switch (table) {
 			case ORDERS:
+				logger.debug("chose Orders repository");
 				repo = new OrdersRepositoryImpl();
 			break;
 			case DETAILS:
+				logger.debug("chose Details repository");
 				repo = new DetailsRepositoryImpl();
 			break;
 			case USERS:
+				logger.debug("chose Users repository");
 				repo = new UsersRepositoryImpl();
 			break;
 			default:
-				repo = null;
+				throw new IllegalArgumentException("Could not select repository");
 
 		}
 	}
@@ -85,17 +88,23 @@ public class Command {
 	// This method gets the object/s from the selected repository
 	private String getObject() throws SQLException {
 		logger.debug("getting objects");
-
+		String response;
 		switch (quantity) {
 			case SINGLE:
 				if (repo instanceof UsersRepositoryImpl) {
 					logger.debug("Returning single user");
-					return gson.toJson(((UsersRepositoryImpl) repo).getUserWithCredentials(values.get("email"),
+					response = gson.toJson(((UsersRepositoryImpl) repo).getUserWithCredentials(values.get("email"),
 							values.get("password")));
+					logger.debug("Reponse from get for single user: " + response);
+					return response;
 				}
-				return gson.toJson(repo.getObjectById(Integer.valueOf(values.get("id"))));
+				response = gson.toJson(repo.getObjectById(Integer.valueOf(values.get("id"))));
+				logger.debug("Response from get single object: " + response);
+				return response;
 			case MULTIPLE:
-				return gson.toJson(repo.getAllObjects());
+				response = gson.toJson(repo.getAllObjects(Integer.valueOf(values.get("customerId"))));
+				logger.debug("Response from get multiple objects: " + response);
+				return response;
 			default:
 				return null;
 		}
@@ -104,10 +113,12 @@ public class Command {
 	// This method updates the object/s from the selected repository
 	private String putObject() {
 		logger.debug("updating objects");
-
+		String response;
 		switch (quantity) {
 			case SINGLE:
-				return String.valueOf(repo.updateObject(body));
+				response = String.valueOf(repo.updateObject(body));
+				logger.debug("Response from put single object: " + response);
+				return response;
 			case MULTIPLE:
 				return null;
 			default:
@@ -118,10 +129,13 @@ public class Command {
 	// This method creates the object/s from the selected repository
 	private String postObject() {
 		logger.info("creating object");
+		String response;
 
 		switch (quantity) {
 			case SINGLE:
-				return String.valueOf(repo.createObject(body));
+				response = String.valueOf(repo.createObject(body));
+				logger.debug("Response from post single object: " + response);
+				return response;
 			case MULTIPLE:
 				return null;
 			default:
@@ -132,10 +146,16 @@ public class Command {
 	// This method removes the object/s from the selected repository
 	private String deleteObject() throws SQLException {
 		logger.debug("deleting object");
+		String response;
 
 		switch (quantity) {
 			case SINGLE:
-				return String.valueOf(repo.deleteObject(Integer.valueOf(values.get("id"))));
+				if (values.get("id") == null || values.get("id").isEmpty()) {
+					return "false";
+				}
+				response = String.valueOf(repo.deleteObject(Integer.valueOf(values.get("id"))));
+				logger.debug("Response from delete single object: " + response);
+				return response;
 			case MULTIPLE:
 				return null;
 			default:

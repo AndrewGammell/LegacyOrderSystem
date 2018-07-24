@@ -11,17 +11,22 @@ public class DetailEntity {
 	private Date	createdDate;
 	private String	updatedStaffId;
 	private Date	updatedDate;
+	private int		customerId;
 
 	public int getOrderId() {
 		return orderId;
 	}
 
 	public void setOrderId(int orderId) {
-		orderId = orderId;
+		this.orderId = orderId;
 	}
 
 	public int getProductId() {
 		return productId;
+	}
+
+	public int getCustomerId() {
+		return customerId;
 	}
 
 	public void setProductId(int productId) {

@@ -9,33 +9,44 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "orders_details", uniqueConstraints = { @UniqueConstraint(columnNames = { "order_id" }) })
+@Table(name = "orders_details", uniqueConstraints = { @UniqueConstraint(columnNames = { "orderId" }) })
 public class DetailModel {
 
 	@Id
-	@Column(name = "order_id", nullable = false, unique = true, length = 11)
+	@Column(name = "orderId", nullable = false, unique = true, length = 11)
 	private int orderId;
 
-	@Column(name = "product_id", nullable = false, length = 11)
+	@Column(name = "productId", nullable = false, length = 11)
 	private int productId;
 
 	@Column(name = "quantity", nullable = false, length = 11)
 	private int quantity;
 
-	@Column(name = "unit_price", nullable = false, length = 11)
+	@Column(name = "unitPrice", nullable = false, length = 11)
 	private int unitPrice;
 
-	@Column(name = "created_staff_id", nullable = false, length = 11)
+	@Column(name = "createdStaffId", nullable = false, length = 11)
 	private String createdStaffId;
 
-	@Column(name = "created_date", nullable = false)
+	@Column(name = "createdDate", nullable = false)
 	private Date createdDate;
 
-	@Column(name = "updated_staff_id", nullable = true)
+	@Column(name = "updatedStaffId", nullable = true)
 	private String updatedStaffId;
 
-	@Column(name = "updated_date")
+	@Column(name = "updatedDate")
 	private Date updatedDate;
+
+	@Column(name = "customerId", nullable = false, length = 11)
+	private int customerId;
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
 
 	public int getOrderId() {
 		return orderId;
