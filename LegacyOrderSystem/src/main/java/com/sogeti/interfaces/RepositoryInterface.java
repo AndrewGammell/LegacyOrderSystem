@@ -9,9 +9,9 @@ public interface RepositoryInterface<T> {
 
 	T getObjectById(int id) throws SQLException;
 
-	boolean updateObject(String body);
+	String updateObject(String body);
 
-	boolean createObject(String body);
+	String createObject(String body);
 
 	boolean deleteObject(int id) throws SQLException;
 }

@@ -1,6 +1,5 @@
 package command.test.cases;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -36,7 +35,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertTrue(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			assertTrue(order != null);
 
 		} catch (Exception e) {
 			fail();
@@ -59,7 +59,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			assertTrue(order == null);
 
 		} catch (Exception e) {
 			fail();
@@ -82,7 +83,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			assertTrue(order == null);
 
 		} catch (Exception e) {
 			fail();
@@ -106,7 +108,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertTrue(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order != null);
 
 		} catch (Exception e) {
 			fail();
@@ -130,7 +133,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order == null);
 
 		} catch (Exception e) {
 			fail();
@@ -153,7 +157,8 @@ public class UpdateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order == null);
 
 		} catch (Exception e) {
 			fail();

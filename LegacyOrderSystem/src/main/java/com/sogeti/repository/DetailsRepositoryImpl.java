@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -17,7 +18,7 @@ import org.hibernate.SessionFactory;
 import com.google.gson.Gson;
 import com.sogeti.adapter.EntityAdapter;
 import com.sogeti.connectors.RepositoryConnector;
-import com.sogeti.hibernate.SessionFactoryBuilder;
+import com.sogeti.entitymanager.JPAEntityManager;
 import com.sogeti.interfaces.RepositoryInterface;
 import com.sogeti.model.DetailModel;
 
@@ -72,44 +73,35 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 	// This method uses hibernate to update the object on the DB
 	@Transactional
 	@Override
-	public boolean updateObject(String body) {
+	public String updateObject(String body) {
 
-		try {
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.update(convertBody(body));
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			logger.debug(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
-		return true;
+		DetailModel detail = jsonToObject(body);
+
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.merge(detail);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+		return objectToJSON(detail);
 	}
 
 	// This method uses hibernate to create the object on the DB
 	@Transactional
 	@Override
-	public boolean createObject(String body) {
+	public String createObject(String body) {
 
-		try {
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.save(convertBody(body));
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			logger.error(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+		DetailModel detail = jsonToObject(body);
 
-		return true;
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.persist(detail);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+		return objectToJSON(detail);
 	}
 
 	// This method deletes an object on the database with the id passed in
@@ -130,8 +122,11 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
-	private DetailModel convertBody(String body) {
+	private DetailModel jsonToObject(String body) {
 		return gson.fromJson(body, DetailModel.class);
 	}
 
+	private String objectToJSON(DetailModel detail) {
+		return gson.toJson(detail);
+	}
 }

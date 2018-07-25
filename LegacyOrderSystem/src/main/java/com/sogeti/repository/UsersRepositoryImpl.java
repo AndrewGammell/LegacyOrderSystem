@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,7 +17,7 @@ import org.hibernate.SessionFactory;
 import com.google.gson.Gson;
 import com.sogeti.adapter.EntityAdapter;
 import com.sogeti.connectors.RepositoryConnector;
-import com.sogeti.hibernate.SessionFactoryBuilder;
+import com.sogeti.entitymanager.JPAEntityManager;
 import com.sogeti.interfaces.RepositoryInterface;
 import com.sogeti.model.UserModel;
 
@@ -93,47 +95,34 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
 	// This method uses hibernate to update the object on the DB
 	@Override
-	public boolean updateObject(String body) {
+	public String updateObject(String body) {
 
-		try {
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.update(convertBody(body));
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			logger.error(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+		UserModel user = jsonToObject(body);
 
-		return true;
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.merge(user);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+		return objectToJSON(user);
 	}
 
 	// This method uses hibernate to create the object on the DB
 	@Override
-	public boolean createObject(String body) {
+	public String createObject(String body) {
 
-		try {
+		UserModel user = jsonToObject(body);
 
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.save(convertBody(body));
-			session.getTransaction().commit();
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
 
-		} catch (Exception e) {
+		entityManager.persist(user);
+		entityManager.getTransaction().commit();
+		entityManager.close();
 
-			logger.error(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-
-			return false;
-		}
-		return true;
+		return objectToJSON(user);
 	}
 
 	// This method deletes an object on the database with the id passed in
@@ -154,8 +143,12 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
-	private UserModel convertBody(String body) {
+	private UserModel jsonToObject(String body) {
 		return gson.fromJson(body, UserModel.class);
+	}
+
+	private String objectToJSON(UserModel user) {
+		return gson.toJson(user);
 	}
 
 }

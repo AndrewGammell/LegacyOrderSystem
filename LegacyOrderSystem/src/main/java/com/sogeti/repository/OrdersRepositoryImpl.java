@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,7 +17,7 @@ import org.hibernate.SessionFactory;
 import com.google.gson.Gson;
 import com.sogeti.adapter.EntityAdapter;
 import com.sogeti.connectors.RepositoryConnector;
-import com.sogeti.hibernate.SessionFactoryBuilder;
+import com.sogeti.entitymanager.JPAEntityManager;
 import com.sogeti.interfaces.RepositoryInterface;
 import com.sogeti.model.OrderModel;
 
@@ -78,45 +80,33 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 
 	// This method uses hibernate to update the object on the DB
 	@Override
-	public boolean updateObject(String body) {
+	public String updateObject(String body) {
 
-		try {
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.update(convertBody(body));
-			session.getTransaction().commit();
+		OrderModel order = jsonToObject(body);
 
-		} catch (Exception e) {
-			logger.error(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
 
-		return true;
+		entityManager.merge(order);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+		return objectToJSON(order);
 	}
 
 	// This method uses hibernate to create the object on the DB
 	@Override
-	public boolean createObject(String body) {
+	public String createObject(String body) {
+		OrderModel order = jsonToObject(body);
 
-		try {
-			factory = SessionFactoryBuilder.getSessionFactory();
-			session = factory.getCurrentSession();
-			session.beginTransaction();
-			session.save(convertBody(body));
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			logger.error(e);
-			if (session.getTransaction().isActive()) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+		EntityManager entityManager = JPAEntityManager.getEntityManager();
+		entityManager.getTransaction().begin();
 
-		return true;
+		entityManager.persist(order);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+
+		return objectToJSON(order);
 	}
 
 	// This method deletes an object on the database with the id passed in
@@ -138,8 +128,13 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 
 	// This method converts the json object from the message into a POJO for
 	// hibernate operations
-	private OrderModel convertBody(String body) {
+	private OrderModel jsonToObject(String body) {
 		return gson.fromJson(body, OrderModel.class);
+	}
+
+	private String objectToJSON(OrderModel obj) {
+
+		return gson.toJson(obj);
 	}
 
 }

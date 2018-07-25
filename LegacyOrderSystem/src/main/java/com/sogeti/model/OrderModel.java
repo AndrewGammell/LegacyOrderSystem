@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -15,7 +17,8 @@ import javax.persistence.UniqueConstraint;
 public class OrderModel {
 
 	@Id
-	@Column(name = "orderId", nullable = false, length = 11)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "orderId", updatable = false, nullable = false, length = 11)
 	private int orderId;
 
 	@Column(name = "dateOrdered", nullable = false)

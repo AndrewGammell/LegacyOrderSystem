@@ -1,6 +1,5 @@
 package command.test.cases;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -17,13 +16,13 @@ import com.sogeti.model.UserModel;
 
 public class CreateCommandTestCases {
 
-	private static final int	ORDER_ID	= -827736;
-	private Gson				gson		= new Gson();
-	private Command				command;
-	private final String		NULL		= null;
-	private final int			USER_ID		= -123456789;
-	private final int			CUSTOMER_ID	= -123;
-	private String				response;
+	private static int		ORDER_ID	= -827736;
+	private Gson			gson		= new Gson();
+	private Command			command;
+	private final String	NULL		= null;
+	private final int		USER_ID		= -123456789;
+	private final int		CUSTOMER_ID	= -123;
+	private String			response;
 
 	@Test
 	public void testExecutePostValidOrderCommand() {
@@ -35,7 +34,9 @@ public class CreateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertTrue(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			ORDER_ID = order.getOrderId();
+			assertTrue(order != null);
 
 		} catch (Exception e) {
 			fail();
@@ -55,7 +56,9 @@ public class CreateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			ORDER_ID = order.getOrderId();
+			assertTrue(order == null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -74,7 +77,9 @@ public class CreateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			OrderModel order = gson.fromJson(response, OrderModel.class);
+			ORDER_ID = order.getOrderId();
+			assertTrue(order == null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -96,7 +101,8 @@ public class CreateCommandTestCases {
 			TestResources.createOrderForTest();
 
 			response = command.executeCommand();
-			assertTrue(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order != null);
 
 		} catch (Exception e) {
 			fail();
@@ -120,7 +126,8 @@ public class CreateCommandTestCases {
 			TestResources.createOrderForTest();
 
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order == null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -143,7 +150,8 @@ public class CreateCommandTestCases {
 			TestResources.createOrderForTest();
 
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			DetailModel order = gson.fromJson(response, DetailModel.class);
+			assertTrue(order == null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -165,7 +173,8 @@ public class CreateCommandTestCases {
 		try {
 
 			response = command.executeCommand();
-			assertTrue(Boolean.valueOf(response));
+			UserModel order = gson.fromJson(response, UserModel.class);
+			assertTrue(order != null);
 
 		} catch (Exception e) {
 			fail();
@@ -185,7 +194,8 @@ public class CreateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			UserModel order = gson.fromJson(response, UserModel.class);
+			assertTrue(order != null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -205,7 +215,8 @@ public class CreateCommandTestCases {
 
 		try {
 			response = command.executeCommand();
-			assertFalse(Boolean.valueOf(response));
+			UserModel order = gson.fromJson(response, UserModel.class);
+			assertTrue(order != null);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
@@ -219,7 +230,6 @@ public class CreateCommandTestCases {
 	private String getValidOrderJson() {
 
 		OrderModel order = new OrderModel();
-		order.setOrderId(ORDER_ID);
 		order.setCreatedDate(new Date());
 		order.setCreatedStaffId("999");
 		order.setStatus(OrderModel.Status.SHIPPED);
