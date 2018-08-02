@@ -20,7 +20,8 @@ public final class RepositoryConnector {
 		Connection con = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost/legacy?" + "user=root&password=secret");
+			con = DriverManager.getConnection(
+					"jdbc:mysql://sogetiirelanddigitalin.mysql.database.azure.com:3306/legacy?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&user=DigInt2018@sogetiirelanddigitalin&password=D1gIt@lInT!");
 		} catch (SQLException sqle) {
 			logger.error(sqle);
 		} catch (ClassNotFoundException cnfe) {
