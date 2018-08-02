@@ -33,9 +33,9 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 	private Session			session;
 	private Gson			gson		= new Gson();
 
-	private String	getAllDetails		= "SELECT * FROM orders_details WHERE customerId=%d";
-	private String	getDetailsById		= "SELECT * FROM orders_details WHERE orderId=%d";
-	private String	deleteFromDatabase	= "DELETE FROM orders_details WHERE orderId=?";
+	private String	getAllDetails		= "SELECT * FROM ordersdetails WHERE customerId=%d";
+	private String	getDetailsById		= "SELECT * FROM ordersdetails WHERE orderId=%d";
+	private String	deleteFromDatabase	= "DELETE FROM ordersdetails WHERE orderId=?";
 
 	// Retrieves all OrderDetails objects from repository
 	@Override
