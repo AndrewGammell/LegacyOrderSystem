@@ -84,6 +84,7 @@ public class QueueService implements Runnable {
 			channel.basicConsume(RPC_QUEUE_NAME, false, consumer);
 			// Wait and be prepared to consume the message from RPC client.
 			while (true) {
+				logger.debug("listening to the queue");
 				synchronized (consumer) {
 					try {
 						consumer.wait();
