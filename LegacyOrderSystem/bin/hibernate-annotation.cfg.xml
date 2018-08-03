@@ -6,9 +6,9 @@
 	<session-factory>
 		<!-- Database connection properties - Driver, URL, user, password -->
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost/legacy</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">secret</property>
+		<property name="hibernate.connection.url">jdbc:mysql://sogetiirelanddigitalin.mysql.database.azure.com/legacy?serverTimezone=UTC</property>
+		<property name="hibernate.connection.username">DigInt2018@sogetiirelanddigitalin</property>
+		<property name="hibernate.connection.password">D1gIt@lInT!</property>
 
 		<!-- org.hibernate.HibernateException: No CurrentSessionContext configured! -->
 		<property name="hibernate.current_session_context_class">thread</property>
