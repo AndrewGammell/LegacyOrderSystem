@@ -18,11 +18,11 @@ public class EntityAdapter {
 
 		order.setOrderId(results.getInt("orderId"));
 		order.setCreatedDate(results.getDate("createdDate"));
-		order.setCreatedStaffId(results.getString("createdStaffId"));
+		order.setCreatedStaffId(results.getInt("createdStaffId"));
 		order.setDateOrdered(results.getDate("dateOrdered"));
 		order.setDateReceived(results.getDate("dateReceived"));
 		order.setUpdatedDate(results.getDate("updatedDate"));
-		order.setUpdatedStaffId(results.getString("updatedStaffId"));
+		order.setUpdatedStaffId(results.getInt("updatedStaffId"));
 		order.setCustomerId(results.getInt("customerId"));
 
 		switch (results.getString("status").toLowerCase()) {
@@ -45,13 +45,13 @@ public class EntityAdapter {
 		DetailModel details = new DetailModel();
 
 		details.setCreatedDate(results.getDate("createdDate"));
-		details.setCreatedStaffId(results.getString("createdStaffId"));
+		details.setCreatedStaffId(results.getInt("createdStaffId"));
 		details.setQuantity(results.getInt("quantity"));
 		details.setOrderId(results.getInt("orderId"));
 		details.setProductId(results.getInt("productId"));
 		details.setUnitPrice(results.getInt("unitPrice"));
 		details.setUpdatedDate(results.getDate("updatedDate"));
-		details.setUpdatedStaffId(results.getString("updatedStaffId"));
+		details.setUpdatedStaffId(results.getInt("updatedStaffId"));
 		details.setCustomerId(results.getInt("customerId"));
 
 		return details;

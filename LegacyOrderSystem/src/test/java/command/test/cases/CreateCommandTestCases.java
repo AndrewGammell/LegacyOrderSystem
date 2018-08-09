@@ -20,7 +20,6 @@ public class CreateCommandTestCases {
 	private Gson			gson		= new Gson();
 	private Command			command;
 	private final String	NULL		= null;
-	private final int		USER_ID		= -123456789;
 	private final int		CUSTOMER_ID	= -123;
 	private String			response;
 
@@ -31,6 +30,7 @@ public class CreateCommandTestCases {
 		command.setType(Command.queryType.POST);
 		command.setTable(Command.queryTable.ORDERS);
 		command.setQuantity(Command.queryQuantity.SINGLE);
+		System.out.println(gson.toJson(command));
 
 		try {
 			response = command.executeCommand();
@@ -97,6 +97,7 @@ public class CreateCommandTestCases {
 		command.setTable(Command.queryTable.DETAILS);
 		command.setQuantity(Command.queryQuantity.SINGLE);
 
+		System.out.println(gson.toJson(command));
 		try {
 			TestResources.createOrderForTest();
 
@@ -231,11 +232,11 @@ public class CreateCommandTestCases {
 
 		OrderModel order = new OrderModel();
 		order.setCreatedDate(new Date());
-		order.setCreatedStaffId("999");
+		order.setCreatedStaffId(999);
 		order.setStatus(OrderModel.Status.SHIPPED);
 		order.setDateOrdered(new Date());
 		order.setCustomerId(CUSTOMER_ID);
-
+		System.out.println(gson.toJson(order));
 		return gson.toJson(order);
 	}
 
@@ -244,7 +245,7 @@ public class CreateCommandTestCases {
 		OrderModel order = new OrderModel();
 		order.setOrderId(123);
 		order.setCreatedDate(null);
-		order.setCreatedStaffId("999");
+		order.setCreatedStaffId(999);
 		order.setStatus(OrderModel.Status.SHIPPED);
 		order.setDateOrdered(null);
 		order.setCustomerId(CUSTOMER_ID);
@@ -259,7 +260,7 @@ public class CreateCommandTestCases {
 		detail.setProductId(12345);
 		detail.setQuantity(20);
 		detail.setUnitPrice(13);
-		detail.setCreatedStaffId("987654321");
+		detail.setCreatedStaffId(987654321);
 		detail.setCreatedDate(new Date());
 		detail.setCustomerId(CUSTOMER_ID);
 
@@ -273,9 +274,9 @@ public class CreateCommandTestCases {
 		detail.setProductId(-172635);
 		detail.setQuantity(20);
 		detail.setUnitPrice(13);
-		detail.setCreatedStaffId("987654321");
+		detail.setCreatedStaffId(987654321);
 		detail.setCreatedDate(null);
-		detail.setCustomerId(ORDER_ID);
+		detail.setCustomerId(CUSTOMER_ID);
 
 		return gson.toJson(detail);
 	}
@@ -283,7 +284,7 @@ public class CreateCommandTestCases {
 	private String getValidUserJson() {
 
 		UserModel user = new UserModel();
-		user.setId(USER_ID);
+		user.setId(CUSTOMER_ID);
 		user.setFirstName("John");
 		user.setLastName("Doenut");
 		user.setEmail("test@test.test");
@@ -297,7 +298,7 @@ public class CreateCommandTestCases {
 	private String getInvalidUserJson() {
 
 		UserModel user = new UserModel();
-		user.setId(USER_ID);
+		user.setId(CUSTOMER_ID);
 		user.setFirstName(NULL);
 		user.setLastName(NULL);
 		user.setEmail(NULL);

@@ -9,7 +9,7 @@ public interface RepositoryInterface<T> {
 
 	T getObjectById(int id) throws SQLException;
 
-	String updateObject(String body);
+	String updateObject(String body, int id);
 
 	String createObject(String body);
 

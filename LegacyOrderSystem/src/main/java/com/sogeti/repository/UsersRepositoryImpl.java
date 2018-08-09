@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -95,22 +96,26 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
 	// This method uses hibernate to update the object on the DB
 	@Override
-	public String updateObject(String body) {
-
-		UserModel user = jsonToObject(body);
+	@Transactional
+	public String updateObject(String body, int id) {
 
 		EntityManager entityManager = JPAEntityManager.getEntityManager();
 		entityManager.getTransaction().begin();
 
-		entityManager.merge(user);
+		UserModel model = jsonToObject(body);
+		UserModel entity = entityManager.find(UserModel.class, id);
+
+		updateEntity(model, entity);
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
-		return objectToJSON(user);
+		return objectToJSON(entity);
 	}
 
 	// This method uses hibernate to create the object on the DB
 	@Override
+	@Transactional
 	public String createObject(String body) {
 
 		UserModel user = jsonToObject(body);
@@ -151,4 +156,39 @@ public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 		return gson.toJson(user);
 	}
 
+	private void updateEntity(UserModel model, UserModel entity) {
+
+		if (model.getCreatedDate() != null) {
+			entity.setCreatedDate(model.getCreatedDate());
+		}
+
+		if (model.getDateOfBirth() != null) {
+			entity.setDateOfBirth(model.getDateOfBirth());
+		}
+
+		if (!model.getEmail().isEmpty()) {
+			entity.setEmail(model.getEmail());
+		}
+
+		if (!model.getFirstName().isEmpty()) {
+			entity.setFirstName(model.getFirstName());
+		}
+
+		if (!model.getLastName().isEmpty()) {
+			entity.setLastName(model.getLastName());
+		}
+
+		if (model.getId() > 0) {
+			entity.setId(model.getId());
+		}
+
+		if (!model.getPassword().isEmpty()) {
+			entity.setPassword(model.getPassword());
+		}
+
+		if (model.getUpdatedDate() != null) {
+			entity.setUpdatedDate(model.getUpdatedDate());
+		}
+
+	}
 }

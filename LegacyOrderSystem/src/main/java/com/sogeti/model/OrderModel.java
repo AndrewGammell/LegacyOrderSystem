@@ -28,17 +28,17 @@ public class OrderModel {
 	private Date dateReceived;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false)
+	@Column(name = "status", columnDefinition = "enum('SHIPPED','RECEIVED','CANCELLED')", nullable = false)
 	private Status status;
 
 	@Column(name = "createdStaffId", nullable = false, length = 11)
-	private String createdStaffId;
+	private int createdStaffId;
 
 	@Column(name = "createdDate", nullable = false)
 	private Date createdDate;
 
 	@Column(name = "updatedStaffId", nullable = true, length = 11)
-	private String updatedStaffId;
+	private int updatedStaffId;
 
 	@Column(name = "updatedDate", nullable = true)
 	private Date updatedDate;
@@ -90,11 +90,11 @@ public class OrderModel {
 		this.status = status;
 	}
 
-	public String getCreatedStaffId() {
+	public int getCreatedStaffId() {
 		return createdStaffId;
 	}
 
-	public void setCreatedStaffId(String createdStaffId) {
+	public void setCreatedStaffId(int createdStaffId) {
 		this.createdStaffId = createdStaffId;
 	}
 
@@ -106,11 +106,11 @@ public class OrderModel {
 		this.createdDate = createdDate;
 	}
 
-	public String getUpdatedStaffId() {
+	public int getUpdatedStaffId() {
 		return updatedStaffId;
 	}
 
-	public void setUpdatedStaffId(String updatedStaffId) {
+	public void setUpdatedStaffId(int updatedStaffId) {
 		this.updatedStaffId = updatedStaffId;
 	}
 
@@ -130,45 +130,60 @@ public class OrderModel {
 	}
 
 	@Override
-
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result + ((createdStaffId == null) ? 0 : createdStaffId.hashCode());
+		result = prime * result + createdStaffId;
+		result = prime * result + customerId;
+		result = prime * result + ((dateOrdered == null) ? 0 : dateOrdered.hashCode());
+		result = prime * result + ((dateReceived == null) ? 0 : dateReceived.hashCode());
 		result = prime * result + orderId;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((updatedDate == null) ? 0 : updatedDate.hashCode());
+		result = prime * result + updatedStaffId;
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		OrderModel other = (OrderModel) obj;
 		if (createdDate == null) {
-			if (other.createdDate != null) {
+			if (other.createdDate != null)
 				return false;
-			}
-		} else if (!createdDate.equals(other.createdDate)) {
+		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		}
-		if (createdStaffId == null) {
-			if (other.createdStaffId != null) {
+		if (createdStaffId != other.createdStaffId)
+			return false;
+		if (customerId != other.customerId)
+			return false;
+		if (dateOrdered == null) {
+			if (other.dateOrdered != null)
 				return false;
-			}
-		} else if (!createdStaffId.equals(other.createdStaffId)) {
+		} else if (!dateOrdered.equals(other.dateOrdered))
 			return false;
-		}
-		if (orderId != other.orderId) {
+		if (dateReceived == null) {
+			if (other.dateReceived != null)
+				return false;
+		} else if (!dateReceived.equals(other.dateReceived))
 			return false;
-		}
+		if (orderId != other.orderId)
+			return false;
+		if (status != other.status)
+			return false;
+		if (updatedDate == null) {
+			if (other.updatedDate != null)
+				return false;
+		} else if (!updatedDate.equals(other.updatedDate))
+			return false;
+		if (updatedStaffId != other.updatedStaffId)
+			return false;
 		return true;
 	}
 

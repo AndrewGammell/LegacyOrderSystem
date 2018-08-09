@@ -3,6 +3,7 @@ package com.sogeti.hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+//TODO REMOVE CLASS IT HAS BEEN REPLACED BY JPA USING HIBERNATE
 public class SessionFactoryBuilder {
 
 	private static SessionFactory factory;

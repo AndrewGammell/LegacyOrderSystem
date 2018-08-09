@@ -175,11 +175,11 @@ public class UpdateCommandTestCases {
 		OrderModel order = new OrderModel();
 		order.setOrderId(ORDER_ID);
 		order.setCreatedDate(new Date());
-		order.setCreatedStaffId("999");
+		order.setCreatedStaffId(999);
 		order.setStatus(OrderModel.Status.SHIPPED);
 		order.setDateOrdered(new Date());
 		order.setUpdatedDate(new Date());
-		order.setUpdatedStaffId("12345");
+		order.setUpdatedStaffId(12345);
 
 		return gson.toJson(order);
 	}
@@ -189,11 +189,11 @@ public class UpdateCommandTestCases {
 		OrderModel order = new OrderModel();
 		order.setOrderId(123);
 		order.setCreatedDate(null);
-		order.setCreatedStaffId("999");
+		order.setCreatedStaffId(999);
 		order.setStatus(OrderModel.Status.SHIPPED);
 		order.setDateOrdered(null);
 		order.setUpdatedDate(new Date());
-		order.setUpdatedStaffId("12345");
+		order.setUpdatedStaffId(12345);
 
 		return gson.toJson(order);
 	}
@@ -205,10 +205,10 @@ public class UpdateCommandTestCases {
 		detail.setProductId(12345);
 		detail.setQuantity(20);
 		detail.setUnitPrice(13);
-		detail.setCreatedStaffId("987654321");
+		detail.setCreatedStaffId(987654321);
 		detail.setCreatedDate(new Date());
 		detail.setUpdatedDate(new Date());
-		detail.setUpdatedStaffId("56789");
+		detail.setUpdatedStaffId(56789);
 
 		return gson.toJson(detail);
 	}
@@ -220,10 +220,10 @@ public class UpdateCommandTestCases {
 		detail.setProductId(-172635);
 		detail.setQuantity(20);
 		detail.setUnitPrice(13);
-		detail.setCreatedStaffId("987654321");
+		detail.setCreatedStaffId(987654321);
 		detail.setCreatedDate(null);
 		detail.setUpdatedDate(new Date());
-		detail.setUpdatedStaffId("56789");
+		detail.setUpdatedStaffId(56789);
 
 		return gson.toJson(detail);
 	}

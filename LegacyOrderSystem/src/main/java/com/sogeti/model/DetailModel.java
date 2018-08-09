@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "orders_details", uniqueConstraints = { @UniqueConstraint(columnNames = { "orderId" }) })
+@Table(name = "ordersdetails", uniqueConstraints = { @UniqueConstraint(columnNames = { "orderId" }) })
 public class DetailModel {
 
 	@Id
@@ -26,13 +26,13 @@ public class DetailModel {
 	private int unitPrice;
 
 	@Column(name = "createdStaffId", nullable = false, length = 11)
-	private String createdStaffId;
+	private int createdStaffId;
 
 	@Column(name = "createdDate", nullable = false)
 	private Date createdDate;
 
 	@Column(name = "updatedStaffId", nullable = true)
-	private String updatedStaffId;
+	private int updatedStaffId = -1;
 
 	@Column(name = "updatedDate")
 	private Date updatedDate;
@@ -80,11 +80,11 @@ public class DetailModel {
 		this.unitPrice = unitPrice;
 	}
 
-	public String getCreatedStaffId() {
+	public int getCreatedStaffId() {
 		return createdStaffId;
 	}
 
-	public void setCreatedStaffId(String createdStaffId) {
+	public void setCreatedStaffId(int createdStaffId) {
 		this.createdStaffId = createdStaffId;
 	}
 
@@ -96,11 +96,11 @@ public class DetailModel {
 		this.createdDate = createdDate;
 	}
 
-	public String getUpdatedStaffId() {
+	public int getUpdatedStaffId() {
 		return updatedStaffId;
 	}
 
-	public void setUpdatedStaffId(String updatedStaffId) {
+	public void setUpdatedStaffId(int updatedStaffId) {
 		this.updatedStaffId = updatedStaffId;
 	}
 
@@ -120,45 +120,54 @@ public class DetailModel {
 	}
 
 	@Override
-
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((createdStaffId == null) ? 0 : createdStaffId.hashCode());
 		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result + createdStaffId;
+		result = prime * result + customerId;
 		result = prime * result + orderId;
+		result = prime * result + productId;
+		result = prime * result + quantity;
+		result = prime * result + unitPrice;
+		result = prime * result + ((updatedDate == null) ? 0 : updatedDate.hashCode());
+		result = prime * result + updatedStaffId;
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		DetailModel other = (DetailModel) obj;
-		if (createdStaffId == null) {
-			if (other.createdStaffId != null) {
-				return false;
-			}
-		} else if (!createdStaffId.equals(other.createdStaffId)) {
-			return false;
-		}
 		if (createdDate == null) {
-			if (other.createdDate != null) {
+			if (other.createdDate != null)
 				return false;
-			}
-		} else if (!createdDate.equals(other.createdDate)) {
+		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		}
-		if (orderId != other.orderId) {
+		if (createdStaffId != other.createdStaffId)
 			return false;
-		}
+		if (customerId != other.customerId)
+			return false;
+		if (orderId != other.orderId)
+			return false;
+		if (productId != other.productId)
+			return false;
+		if (quantity != other.quantity)
+			return false;
+		if (unitPrice != other.unitPrice)
+			return false;
+		if (updatedDate == null) {
+			if (other.updatedDate != null)
+				return false;
+		} else if (!updatedDate.equals(other.updatedDate))
+			return false;
+		if (updatedStaffId != other.updatedStaffId)
+			return false;
 		return true;
 	}
 

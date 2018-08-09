@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -80,33 +82,54 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 
 	// This method uses hibernate to update the object on the DB
 	@Override
-	public String updateObject(String body) {
+	@Transactional
+	public String updateObject(String body, int id) {
 
-		OrderModel order = jsonToObject(body);
+		String response;
 
-		EntityManager entityManager = JPAEntityManager.getEntityManager();
-		entityManager.getTransaction().begin();
+		try {
+			EntityManager entityManager = JPAEntityManager.getEntityManager();
+			entityManager.getTransaction().begin();
 
-		entityManager.merge(order);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			OrderModel model = jsonToObject(body);
+			OrderModel entity = entityManager.find(OrderModel.class, id);
 
-		return objectToJSON(order);
+			logger.info("Entity found " + entity);
+			updateEntity(model, entity);
+			logger.info("Entity being updated " + entity);
+
+			entityManager.merge(entity);
+			entityManager.getTransaction().commit();
+
+			response = objectToJSON(entity);
+		} catch (Exception e) {
+			response = "Exception caught in updateObject() of the order repository casued by " + e.getCause();
+		}
+		return response;
 	}
 
 	// This method uses hibernate to create the object on the DB
 	@Override
+	@Transactional
 	public String createObject(String body) {
-		OrderModel order = jsonToObject(body);
+		String response;
+		try {
 
-		EntityManager entityManager = JPAEntityManager.getEntityManager();
-		entityManager.getTransaction().begin();
+			OrderModel order = jsonToObject(body);
 
-		entityManager.persist(order);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			EntityManager entityManager = JPAEntityManager.getEntityManager();
+			entityManager.getTransaction().begin();
 
-		return objectToJSON(order);
+			entityManager.persist(order);
+			entityManager.getTransaction().commit();
+
+			response = objectToJSON(order);
+		} catch (Exception e) {
+
+			response = "Exception caught in createObject() of the order repository casued by " + e.getCause();
+		}
+
+		return response;
 	}
 
 	// This method deletes an object on the database with the id passed in
@@ -137,4 +160,39 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 		return gson.toJson(obj);
 	}
 
+	// This method is used to update the entity found on the db with the model
+	// passed in through the client
+	private void updateEntity(OrderModel model, OrderModel entity) {
+
+		if (model.getCreatedDate() != null) {
+			entity.setCreatedDate(model.getCreatedDate());
+		}
+
+		if (model.getCreatedStaffId() > 0) {
+			entity.setCreatedStaffId(model.getCreatedStaffId());
+		}
+
+		if (model.getCustomerId() > 0) {
+			entity.setCustomerId(model.getCustomerId());
+		}
+
+		if (model.getDateOrdered() != null) {
+			entity.setDateOrdered(model.getDateOrdered());
+		}
+
+		if (model.getDateReceived() != null) {
+			entity.setDateReceived(model.getDateReceived());
+		}
+
+		if (model.getStatus() != null) {
+			entity.setStatus(model.getStatus());
+		}
+
+		entity.setUpdatedDate(new Date());
+
+		if (model.getUpdatedStaffId() > 0) {
+			entity.setUpdatedStaffId(model.getUpdatedStaffId());
+		}
+
+	}
 }

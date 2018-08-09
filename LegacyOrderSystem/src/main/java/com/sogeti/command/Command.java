@@ -116,7 +116,7 @@ public class Command {
 		String response;
 		switch (quantity) {
 			case SINGLE:
-				response = String.valueOf(repo.updateObject(body));
+				response = String.valueOf(repo.updateObject(body, Integer.valueOf(values.get("id"))));
 				logger.debug("Response from put single object: " + response);
 				return response;
 			case MULTIPLE:

@@ -71,37 +71,53 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 	}
 
 	// This method uses hibernate to update the object on the DB
-	@Transactional
 	@Override
-	public String updateObject(String body) {
+	@Transactional
+	public String updateObject(String body, int id) {
 
-		DetailModel detail = jsonToObject(body);
+		String response;
 
-		EntityManager entityManager = JPAEntityManager.getEntityManager();
-		entityManager.getTransaction().begin();
+		try {
+			EntityManager entityManager = JPAEntityManager.getEntityManager();
+			entityManager.getTransaction().begin();
 
-		entityManager.merge(detail);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			DetailModel model = jsonToObject(body);
+			DetailModel entity = entityManager.find(DetailModel.class, id);
 
-		return objectToJSON(detail);
+			updateEntity(model, entity);
+
+			entityManager.getTransaction().commit();
+			entityManager.close();
+
+			response = objectToJSON(entity);
+		} catch (Exception e) {
+			response = "Exception caught in updateObject() of the details repository casued by " + e.getCause();
+		}
+		return response;
 	}
 
 	// This method uses hibernate to create the object on the DB
-	@Transactional
 	@Override
+	@Transactional
 	public String createObject(String body) {
 
-		DetailModel detail = jsonToObject(body);
+		String response;
 
-		EntityManager entityManager = JPAEntityManager.getEntityManager();
-		entityManager.getTransaction().begin();
+		try {
+			DetailModel detail = jsonToObject(body);
 
-		entityManager.persist(detail);
-		entityManager.getTransaction().commit();
-		entityManager.close();
+			EntityManager entityManager = JPAEntityManager.getEntityManager();
+			entityManager.getTransaction().begin();
 
-		return objectToJSON(detail);
+			entityManager.persist(detail);
+			entityManager.getTransaction().commit();
+			entityManager.close();
+
+			response = objectToJSON(detail);
+		} catch (Exception e) {
+			response = "Exception caught in createObject() of the details repository casued by " + e.getCause();
+		}
+		return response;
 	}
 
 	// This method deletes an object on the database with the id passed in
@@ -128,5 +144,43 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 
 	private String objectToJSON(DetailModel detail) {
 		return gson.toJson(detail);
+	}
+
+	// This method is used to update the entity found on the db with the model
+	// passed in through the client
+	private void updateEntity(DetailModel model, DetailModel entity) {
+
+		if (model.getCreatedDate() != null) {
+			entity.setCreatedDate(model.getCreatedDate());
+		}
+
+		if (model.getCreatedStaffId() > 0) {
+			entity.setCreatedStaffId(model.getCreatedStaffId());
+		}
+
+		if (model.getCustomerId() > 0) {
+			entity.setCustomerId(model.getCustomerId());
+		}
+
+		if (model.getProductId() > 0) {
+			entity.setProductId(model.getProductId());
+		}
+
+		if (model.getQuantity() > 0) {
+			entity.setQuantity(model.getQuantity());
+		}
+
+		if (model.getUnitPrice() > 0) {
+			entity.setUnitPrice(model.getUnitPrice());
+		}
+
+		if (model.getUpdatedDate() != null) {
+			entity.setUpdatedDate(model.getUpdatedDate());
+		}
+
+		if (model.getUpdatedStaffId() > 0) {
+			entity.setUpdatedStaffId(model.getUpdatedStaffId());
+		}
+
 	}
 }
