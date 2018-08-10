@@ -89,6 +89,7 @@ public class GetCommandTestCases {
 		try {
 			TestResources.createUserForTest();
 
+			System.out.println(getUserCommand());
 			String response = getUserCommand().executeCommand();
 			assertNotNull(response);
 		} catch (SQLException e) {

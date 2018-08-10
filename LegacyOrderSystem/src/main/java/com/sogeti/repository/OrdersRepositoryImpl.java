@@ -88,7 +88,9 @@ public class OrdersRepositoryImpl implements RepositoryInterface<OrderModel> {
 		String response;
 
 		try {
+
 			EntityManager entityManager = JPAEntityManager.getEntityManager();
+
 			entityManager.getTransaction().begin();
 
 			OrderModel model = jsonToObject(body);

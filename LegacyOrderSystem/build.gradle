@@ -51,6 +51,10 @@ dependencies {
 	
 	compile 'org.hibernate:hibernate-entitymanager:5.3.1.Final'
 	
+	// https://mvnrepository.com/artifact/com.mchange/c3p0
+	compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
+	
+	
 	
 	
     

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -174,9 +175,7 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 			entity.setUnitPrice(model.getUnitPrice());
 		}
 
-		if (model.getUpdatedDate() != null) {
-			entity.setUpdatedDate(model.getUpdatedDate());
-		}
+		entity.setUpdatedDate(new Date());
 
 		if (model.getUpdatedStaffId() > 0) {
 			entity.setUpdatedStaffId(model.getUpdatedStaffId());
