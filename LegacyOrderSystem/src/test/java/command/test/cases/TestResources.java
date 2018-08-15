@@ -10,8 +10,7 @@ import com.sogeti.connectors.RepositoryConnector;
 
 public class TestResources {
 
-	private static final Connection connector = RepositoryConnector.getConnection();
-
+	private static final Connection connector = new RepositoryConnector().getConnection();
 	// insert queries for DB
 	private static final String	INSERT_ORDER_TO_DB		= "INSERT INTO orders values(%d,'%s','%s','%s',%d,'%s',%d,'%s',%s);";
 	private static final String	INSERT_DETAILS_TO_DB	= "INSERT INTO orders_details value(%d,%d,%d,%d,%d,'%s',%d,'%s',%d)";

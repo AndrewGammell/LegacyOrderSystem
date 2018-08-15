@@ -25,7 +25,7 @@ import com.sogeti.model.UserModel;
 public class UsersRepositoryImpl implements RepositoryInterface<UserModel> {
 
 	private static final Logger	logger		= Logger.getLogger(UsersRepositoryImpl.class);
-	private Connection			connector	= RepositoryConnector.getConnection();
+	private Connection			connector	= new RepositoryConnector().getConnection();
 	private Statement			statement;
 	private ResultSet			results;
 	private SessionFactory		factory;

@@ -13,7 +13,7 @@ import com.sogeti.repository.UsersRepositoryImpl;
 
 public class Command {
 
-	private Logger				logger	= Logger.getLogger(Command.class);
+	private static final Logger	logger	= Logger.getLogger(Command.class);
 	private Gson				gson	= new Gson();
 	private RepositoryInterface	repo;
 
