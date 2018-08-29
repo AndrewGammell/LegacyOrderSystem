@@ -6,14 +6,14 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-public class CustomProperties {
+public class PropertiesReader {
 
-	private static final Logger	logger	= Logger.getLogger(CustomProperties.class);
+	private static final Logger	logger	= Logger.getLogger(PropertiesReader.class);
 	private static Properties	prop	= null;
 
 	// This class is private to stop creation of the class and prevent multiple
 	// instances of the properties being load and existing in memory.
-	private CustomProperties() {
+	private PropertiesReader() {
 
 	}
 
@@ -25,7 +25,7 @@ public class CustomProperties {
 	public static String getProperty(String property) {
 
 		if (prop == null) {
-			synchronized (CustomProperties.class) {
+			synchronized (PropertiesReader.class) {
 				if (prop == null) {
 					loadProperties();
 				}
@@ -44,7 +44,12 @@ public class CustomProperties {
 		InputStream input;
 
 		try {
-			input = CustomProperties.class.getClassLoader().getResourceAsStream("config.properties");
+			if (System.getProperty("env") != null) {
+				input = PropertiesReader.class.getClassLoader()
+						.getResourceAsStream(System.getProperty("env") + ".properties");
+			} else {
+				input = PropertiesReader.class.getClassLoader().getResourceAsStream("default.properties");
+			}
 
 			if (input == null) {
 				logger.debug("Properties file could not be found");

@@ -15,16 +15,16 @@ import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.sogeti.command.Command;
-import com.sogeti.properties.CustomProperties;
+import com.sogeti.properties.PropertiesReader;
 
 public class QueueService implements Runnable {
 
 	private final Logger		logger			= Logger.getLogger(this.getClass());
-	private static final String	RPC_QUEUE_NAME	= CustomProperties.getProperty("queue_name");
-	private static final String	IP_ADDRESS		= CustomProperties.getProperty("ip_address");
-	private static final String	QUEUE_USERNAME	= CustomProperties.getProperty("queue_username");
-	private static final String	QUEUE_PASSWORD	= CustomProperties.getProperty("queue_password");
-	private static final String	QUEUE_PORT		= CustomProperties.getProperty("queue_port");
+	private static final String	RPC_QUEUE_NAME	= PropertiesReader.getProperty("queue_name");
+	private static final String	IP_ADDRESS		= PropertiesReader.getProperty("ip_address");
+	private static final String	QUEUE_USERNAME	= PropertiesReader.getProperty("queue_username");
+	private static final String	QUEUE_PASSWORD	= PropertiesReader.getProperty("queue_password");
+	private static final String	QUEUE_PORT		= PropertiesReader.getProperty("queue_port");
 	private static final Gson	gson			= new Gson();
 	private static Command		command;
 

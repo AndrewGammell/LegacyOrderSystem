@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.sogeti.properties.CustomProperties;
+import com.sogeti.properties.PropertiesReader;
 
 public final class RepositoryConnector {
 
@@ -20,9 +20,9 @@ public final class RepositoryConnector {
 	public Connection getConnection() {
 		Connection con = null;
 		try {
-			Class.forName(CustomProperties.getProperty("db_driver"));
-			con = DriverManager.getConnection(CustomProperties.getProperty("db_connection"),
-					CustomProperties.getProperty("db_user"), CustomProperties.getProperty("db_password"));
+			Class.forName(PropertiesReader.getProperty("db_driver"));
+			con = DriverManager.getConnection(PropertiesReader.getProperty("db_connection"),
+					PropertiesReader.getProperty("db_user"), PropertiesReader.getProperty("db_password"));
 
 		} catch (SQLException sqle) {
 			logger.error(sqle);
