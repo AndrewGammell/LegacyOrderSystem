@@ -19,7 +19,6 @@ public class UpdateCommandTestCases {
 	private Command			command;
 	private final String	NULL		= null;
 	private final int		ORDER_ID	= TestResources.ORDER_ID;
-	private final int		USER_ID		= TestResources.USER_ID;
 	private String			response;
 
 	@Test

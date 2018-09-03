@@ -9,16 +9,13 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.google.gson.Gson;
 import com.sogeti.command.Command;
 
 public class DeleteCommandTestCases {
 
-	private Gson				gson		= new Gson();
 	private Command				command;
 	private final String		NULL		= null;
 	private final int			ORDER_ID	= TestResources.ORDER_ID;
-	private final int			USER_ID		= TestResources.USER_ID;
 	private String				response;
 	private Map<String, String>	values;
 

@@ -44,9 +44,10 @@ public class PropertiesReader {
 		InputStream input;
 
 		try {
-			if (System.getProperty("env") != null) {
+
+			if (System.getenv("env") != null) {
 				input = PropertiesReader.class.getClassLoader()
-						.getResourceAsStream(System.getProperty("env") + ".properties");
+						.getResourceAsStream(System.getenv("env") + ".properties");
 			} else {
 				input = PropertiesReader.class.getClassLoader().getResourceAsStream("default.properties");
 			}

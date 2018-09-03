@@ -12,9 +12,6 @@ public final class RepositoryConnector {
 
 	private static final Logger logger = Logger.getLogger(RepositoryConnector.class);
 
-	public RepositoryConnector() {
-	}
-
 	// The purpose of this method is to control the construction of the
 	// RepositoryConnector without making it a singleton.
 	public Connection getConnection() {

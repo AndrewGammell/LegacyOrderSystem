@@ -13,8 +13,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import com.google.gson.Gson;
 import com.sogeti.adapter.EntityAdapter;
@@ -27,12 +25,10 @@ public class DetailsRepositoryImpl implements RepositoryInterface<DetailModel> {
 
 	private static final Logger logger = Logger.getLogger(DetailsRepositoryImpl.class);
 
-	private Connection		connector	= new RepositoryConnector().getConnection();
-	private Statement		statement;
-	private ResultSet		results;
-	private SessionFactory	factory;
-	private Session			session;
-	private Gson			gson		= new Gson();
+	private Connection	connector	= new RepositoryConnector().getConnection();
+	private Statement	statement;
+	private ResultSet	results;
+	private Gson		gson		= new Gson();
 
 	private String	getAllDetails		= "SELECT * FROM ordersdetails WHERE customerId=%d";
 	private String	getDetailsById		= "SELECT * FROM ordersdetails WHERE orderId=%d";
