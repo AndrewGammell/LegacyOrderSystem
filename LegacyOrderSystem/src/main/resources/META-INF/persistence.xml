@@ -14,9 +14,9 @@
 
 			<!-- Database connection settings -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://sogetiirelanddigitalin.mysql.database.azure.com/legacy?serverTimezone=UTC" />
-			<property name="javax.persistence.jdbc.user" value="DigInt2018@sogetiirelanddigitalin" />
-			<property name="javax.persistence.jdbc.password" value="D1gIt@lInT!" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/legacy" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="secret" />
 
 
 			<!-- Hibernate properties -->
